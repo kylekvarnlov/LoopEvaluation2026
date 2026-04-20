@@ -1,1 +1,1 @@
-
+This repository holds the test cases written for the Loop Technical Evaluation. The 6 cases call upon the login function and the card verification function to automate and test login as well as verify the tags and locations of tasks.
