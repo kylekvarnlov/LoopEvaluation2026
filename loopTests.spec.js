@@ -25,48 +25,21 @@ async function verifyCardDetails(page, appName, taskName, columnName, tags){
 
 }
 
+const testData = [
+  ['Web Application', 'Implement user authentication', 'To Do', ['Feature', 'High Priority']], //test case 1
+  ['Web Application', 'Fix navigation bug', 'To Do', ['Bug']], //test case 2
+  ['Web Application', 'Design system updates', 'In Progress', ['Design']], //test case 3
+  ['Mobile Application', 'Push notification system', 'To Do', ['Feature']], //test case 4
+  ['Mobile Application', 'Offline mode', 'In Progress', ['Feature', 'High Priority']], //test case 5
+  ['Mobile Application', 'App icon design', 'Done', ['Design']] //test case 6
+];
 
-
-test('Test Case 1', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Web Application/i }).click();
-await expect(page.getByText('Implement user authentication', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Web Application', 'Implement user authentication', 'To Do', ['Feature', 'High Priority']);
-});
-
-test('Test Case 2', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Web Application/i }).click();
-await expect(page.getByText('Fix navigation bug', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Web Application', 'Fix navigation bug', 'To Do', ['Bug']);
-});
-
-test('Test Case 3', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Web Application/i }).click();
-await expect(page.getByText('Design system updates', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Web Application', 'Design system updates', 'In Progress', ['Design']);
-});
-
-test('Test Case 4', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Mobile Application/i }).click();
-await expect(page.getByText('Push notification system', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Mobile Application', 'Push notification system', 'To Do', ['Feature']);
-});
-
-test('Test Case 5', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Mobile Application/i }).click();
-await expect(page.getByText('Offline mode', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Mobile Application', 'Offline mode', 'In Progress', ['Feature', 'High Priority']);
-});
-
-test('Test Case 6', async ({ page }) => {
-await login(page);
-await page.getByRole('button', { name: /Mobile Application/i }).click();
-await expect(page.getByText('App icon design', { exact: true })).toBeVisible();
-await verifyCardDetails(page, 'Mobile Application', 'App icon design', 'Done', ['Design']);
-});
+for (let i = 0; i < testData.length; i++) {
+  const [appName, taskName, columnName, tags] = testData[i];
+  test(`Test Case ${i + 1}`, async ({ page }) => {
+    await login(page);
+    await verifyCardDetails(page, appName, taskName, columnName, tags);
+  });
+}
 
 
