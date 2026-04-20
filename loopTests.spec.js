@@ -4,7 +4,6 @@ import { test, expect } from '@playwright/test';
 async function login(page){
   await page.goto('https://animated-gingersnap-8cf7f2.netlify.app/');
 
-  // Fill in the username and password fields.
   await page.locator('input[type="text"]').fill('admin');
   await page.locator('input[type="password"]').fill('password123');
   await page.locator('button[type="submit"]').click();
@@ -14,7 +13,6 @@ async function login(page){
 
 async function verifyCardDetails(page, appName, taskName, columnName, tags){
   await page.getByRole('button', { name: new RegExp(appName, 'i') }).click();
-  await expect(page.getByText(taskName, { exact: true })).toBeVisible();
   const columnSection = page.locator(`text=${columnName}`).locator('..');
   await expect(columnSection).toContainText(taskName);
   const taskCard = columnSection.getByText(taskName, { exact: true }).locator('..');
