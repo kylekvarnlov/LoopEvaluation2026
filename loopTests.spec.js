@@ -13,12 +13,11 @@ async function login(page){
 }
 
 async function verifyCardDetails(page, appName, taskName, columnName, tags){
-  await page.getByRole('button', { name: appName }).click();
+  await page.getByRole('button', { name: new RegExp(appName, 'i') }).click();
   await expect(page.getByText(taskName, { exact: true })).toBeVisible();
   const columnSection = page.locator(`text=${columnName}`).locator('..');
   await expect(columnSection).toContainText(taskName);
- 
-  const taskCard = page.getByText(taskName, { exact: true }).locator('..');
+  const taskCard = columnSection.getByText(taskName, { exact: true }).locator('..');
   for(const tag of tags){
     await expect(taskCard).toContainText(tag);
   }
@@ -26,19 +25,54 @@ async function verifyCardDetails(page, appName, taskName, columnName, tags){
 }
 
 const testData = [
-  ['Web Application', 'Implement user authentication', 'To Do', ['Feature', 'High Priority']], //test case 1
-  ['Web Application', 'Fix navigation bug', 'To Do', ['Bug']], //test case 2
-  ['Web Application', 'Design system updates', 'In Progress', ['Design']], //test case 3
-  ['Mobile Application', 'Push notification system', 'To Do', ['Feature']], //test case 4
-  ['Mobile Application', 'Offline mode', 'In Progress', ['Feature', 'High Priority']], //test case 5
-  ['Mobile Application', 'App icon design', 'Done', ['Design']] //test case 6
+  {
+    name: "Test Case 1",
+    appName: 'Web Application',
+    taskName: 'Implement user authentication',
+    columnName: 'To Do',
+    tags: ['Feature', 'High Priority']
+  },
+  {
+    name: "Test Case 2",
+    appName: 'Web Application',
+    taskName: 'Fix navigation bug',
+    columnName: 'To Do',
+    tags: ['Bug']
+  },
+  {
+    name: "Test Case 3",
+    appName: 'Web Application',
+    taskName: 'Design system updates',
+    columnName: 'In Progress',
+    tags: ['Design']
+  },
+  {
+    name: "Test Case 4",
+    appName: 'Mobile Application',
+    taskName: 'Push notification system',
+    columnName: 'To Do',
+    tags: ['Feature']
+  },
+  {
+    name: "Test Case 5",
+    appName: 'Mobile Application',
+    taskName: 'Offline mode',
+    columnName: 'In Progress',
+    tags: ['Feature', 'High Priority']
+  },
+  {
+    name: "Test Case 6",
+    appName: 'Mobile Application',
+    taskName: 'App icon design',
+    columnName: 'Done',
+    tags: ['Design'] 
+  }
 ];
 
-for (let i = 0; i < testData.length; i++) {
-  const [appName, taskName, columnName, tags] = testData[i];
-  test(`Test Case ${i + 1}`, async ({ page }) => {
+for (const data of testData) {
+  test(data.name, async ({ page }) => {
     await login(page);
-    await verifyCardDetails(page, appName, taskName, columnName, tags);
+    await verifyCardDetails(page, data.appName, data.taskName, data.columnName, data.tags);
   });
 }
 
